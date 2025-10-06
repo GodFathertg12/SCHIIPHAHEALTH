@@ -8,7 +8,8 @@ const supabase = createClient(
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const body: any = await req.json();
     const { email, amount, reference, status } = body;
 
     const { error } = await supabase.from("payments").insert([

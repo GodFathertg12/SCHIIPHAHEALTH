@@ -8,8 +8,7 @@ export default function CheckoutPage() {
   const ctx = useContext(CartContext);
   const quantity = ctx?.quantity ?? 1;
   const referralCode =
-    ctx?.referralCode ??
-    (typeof window !== "undefined" ? localStorage.getItem("referralCode") ?? "" : "");
+    ctx?.referralCode ?? (typeof window !== "undefined" ? localStorage.getItem("referralCode") ?? "" : "");
   const referralDiscount = ctx?.referralDiscount ?? 0;
   const discountedTotal = ctx?.discountedTotal ?? 0;
   const clearCart = ctx?.clearCart ?? (() => {});
@@ -47,6 +46,7 @@ export default function CheckoutPage() {
     if (!scriptLoaded) return alert("⚠️ Paystack not ready yet. Please wait.");
     if (!email) return alert("Please enter your email.");
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const PaystackPop = (window as any).PaystackPop;
     if (!PaystackPop) return alert("⚠️ Paystack failed to initialize.");
 
@@ -65,6 +65,7 @@ export default function CheckoutPage() {
           },
         ],
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       callback: (response: any) => {
         console.log("✅ Payment successful:", response);
         alert(`✅ Payment successful! Reference: ${response.reference}`);

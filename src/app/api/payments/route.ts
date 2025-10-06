@@ -1,4 +1,3 @@
-// src/app/api/payments/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -9,9 +8,9 @@ const supabase = createClient(
 
 export async function POST(request: Request) {
   try {
-    const { email, amount, reference, status, referral_code } = await request.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { email, amount, reference, status, referral_code }: any = await request.json();
 
-    // ✅ Insert into Supabase
     const { data, error } = await supabase
       .from("payments")
       .insert([
@@ -29,9 +28,9 @@ export async function POST(request: Request) {
       console.error("Supabase insert error:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
-     if (referral_code && referral_code !== "none") {
-      // Find the referrer email (assuming referralCode is their email or code mapped to email)
-      const { data: refData } = await supabase
+
+    if (referral_code && referral_code !== "none") {
+      const { data: refData }: any = await supabase
         .from("users")
         .select("email")
         .eq("referral_code", referral_code)
