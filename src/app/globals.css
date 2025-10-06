@@ -1,0 +1,41 @@
+/* src/app/globals.css */
+
+/* Load Fraunces for headings */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@200;300;400;700&display=swap');
+
+/* Design tokens */
+:root{
+  --base: #403F2B;
+  --accent-light: #F3F1C4;
+  --accent-dark: #29291F;
+  --cream: #FEFAF1;
+}
+
+/* Reset & base */
+* { box-sizing: border-box; }
+html, body, #__next { height: 100%; }
+body {
+  margin: 0;
+  font-family: Avenir, "Avenir Next", "Helvetica Neue", system-ui, -apple-system, "Segoe UI", Roboto, "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(180deg, var(--base) 0%, var(--accent-dark) 100%);
+  color: var(--cream);
+}
+
+/* Headings */
+h1,h2,h3 { font-family: "Fraunces", serif; color: var(--accent-light); margin: 0; }
+
+/* Utility buttons (used in components) */
+.btn-primary { background: var(--base); color: var(--cream); }
+.btn-accent  { background: var(--accent-light); color: var(--accent-dark); }
+
+/* Container */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+
+/* Page transition classes */
+.page-transition { opacity: 0; transform: translateY(8px); transition: opacity 300ms ease, transform 300ms ease; }
+.page-transition.entered { opacity: 1; transform: translateY(0); }
+
+/* Image safety */
+img { max-width: 100%; height: auto; display: block; }
