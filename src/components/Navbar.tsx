@@ -34,7 +34,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8 text-[#FEFAF1]">
           <Link href="/" className="hover:text-[#F3F1C4]">HOME</Link>
           <Link href="/#welcome" className="hover:text-[#F3F1C4]">WELCOME</Link>
-          <Link href="/products" className="hover:text-[#F3F1C4]">PRODUCT GALLERY</Link>
+          {/*<Link href="/products" className="hover:text-[#F3F1C4]">PRODUCT GALLERY</Link>*/}
 
           <div className="relative">
             <button onClick={() => setMoreOpen(v => !v)} className="hover:text-[#F3F1C4]">
@@ -76,7 +76,7 @@ export default function Navbar() {
           <div className="container py-4 flex flex-col gap-3 text-[#FEFAF1]">
             <Link href="/" onClick={() => setOpen(false)}>HOME</Link>
             <Link href="/#welcome" onClick={() => setOpen(false)}>WELCOME</Link>
-            <Link href="/products" onClick={() => setOpen(false)}>PRODUCT GALLERY</Link>
+            {/*<Link href="/products" onClick={() => setOpen(false)}>PRODUCT GALLERY</Link>*/}
             <Link href="/about" onClick={() => setOpen(false)}>ABOUT US</Link>
             <Link href="/contact" onClick={() => setOpen(false)}>CONTACT</Link>
             <div className="pt-2 border-t border-[#29291F] flex items-center gap-2">

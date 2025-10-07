@@ -1,47 +1,51 @@
 "use client";
-
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function ShopPage() {
   return (
-    <main className="min-h-screen bg-[#FEFAF1] flex flex-col items-center justify-center px-6 py-12">
-      <h1 className="text-4xl md:text-5xl font-[Fraunces] mb-12 text-[#403F2B] text-center">
-        Choose Your Shop Type
-      </h1>
+    <main className="min-h-screen bg-[#FEFAF1] text-[#29291F] flex flex-col items-center justify-center px-6 py-12">
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-4xl md:text-5xl font-[Fraunces] mb-10"
+      >
+        Choose Your Pack
+      </motion.h1>
 
-      <div className="flex flex-col md:flex-row gap-12">
-        {/* Student Option */}
+      <div className="grid md:grid-cols-2 gap-10 max-w-5xl w-full">
+        {/* Student Pack */}
         <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-[#403F2B] text-[#FEFAF1] p-12 rounded-lg shadow-lg flex flex-col items-center gap-6 cursor-pointer"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="bg-white rounded-xl shadow-xl p-8 flex flex-col items-center text-center hover:shadow-2xl transition"
         >
-          <h2 className="text-2xl font-semibold">Student</h2>
-          <p className="text-center">
-            7 pieces of Bum's Hero <br /> <span className="font-bold">₦3,000</span>
-          </p>
-          <Link
-            href="/student"
-            className="mt-4 bg-[#F3F1C4] text-[#29291F] px-6 py-3 rounded-lg font-semibold hover:bg-[#d9d79e] transition"
-          >
-            Shop Now
+          <img src="/product.png" alt="Student Pack" className="rounded-lg w-56 mb-6" />
+          <h2 className="text-2xl font-semibold mb-4 text-[#403F2B]">Student Pack</h2>
+          <p className="text-[#403F2B] mb-6">7 pieces for ₦3,000 — perfect for students.</p>
+          <Link href="/shop/student">
+            <button className="bg-[#403F2B] text-[#FEFAF1] px-6 py-3 rounded-lg hover:bg-[#29291F] transition">
+              View Details
+            </button>
           </Link>
         </motion.div>
 
-        {/* Enterprise Option */}
+        {/* Enterprise Pack */}
         <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="bg-[#29291F] text-[#FEFAF1] p-12 rounded-lg shadow-lg flex flex-col items-center gap-6 cursor-pointer"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="bg-white rounded-xl shadow-xl p-8 flex flex-col items-center text-center hover:shadow-2xl transition"
         >
-          <h2 className="text-2xl font-semibold">Enterprise</h2>
-          <p className="text-center">
-            100 pieces of Bum's Hero <br /> <span className="font-bold">₦90,000</span>
-          </p>
-          <Link
-            href="/enterprise"
-            className="mt-4 bg-[#F3F1C4] text-[#29291F] px-6 py-3 rounded-lg font-semibold hover:bg-[#d9d79e] transition"
-          >
-            Shop Now
+          <img src="/product.png" alt="Enterprise Pack" className="rounded-lg w-56 mb-6" />
+          <h2 className="text-2xl font-semibold mb-4 text-[#403F2B]">Enterprise Pack</h2>
+          <p className="text-[#403F2B] mb-6">100 pieces for ₦90,000 — great for businesses.</p>
+          <Link href="/shop/enterprise">
+            <button className="bg-[#403F2B] text-[#FEFAF1] px-6 py-3 rounded-lg hover:bg-[#29291F] transition">
+              View Details
+            </button>
           </Link>
         </motion.div>
       </div>

@@ -76,7 +76,7 @@ export default function HomePage() {
           className="mt-10"
         >
           <Link
-            href="/product"
+            href="/shop"
             className="bg-[#F3F1C4] text-[#29291F] px-6 py-3 rounded-lg font-semibold hover:bg-[#d9d79e] transition-transform transform hover:scale-105"
           >
             Shop Now

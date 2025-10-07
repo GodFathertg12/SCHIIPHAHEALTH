@@ -1,14 +1,11 @@
-"use client"
-import { motion } from "framer-motion"
+"use client";
+import { motion } from "framer-motion";
 
 export default function Hero() {
   return (
     <section
       id="welcome"
-      className="relative bg-cover bg-center h-screen flex items-center justify-center"
-      style={{
-        backgroundImage: "url('/hero-background.jpg')", // Replace with your hero image
-      }}
+      className="relative h-screen flex items-center justify-center bg-gradient-to-b from-blue-900 to-black"
     >
       {/* Overlay for readability */}
       <div className="absolute inset-0 bg-black bg-opacity-50"></div>
@@ -29,7 +26,7 @@ export default function Hero() {
         </p>
         <div className="flex justify-center space-x-4">
           <a
-            href="#products"
+            href="/shop"
             className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg font-semibold transition"
           >
             Shop Now
@@ -43,5 +40,5 @@ export default function Hero() {
         </div>
       </motion.div>
     </section>
-  )
+  );
 }
