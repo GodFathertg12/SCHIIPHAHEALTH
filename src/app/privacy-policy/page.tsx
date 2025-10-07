@@ -3,7 +3,7 @@
 export default function PrivacyPolicy() {
   return (
     <main className="max-w-3xl mx-auto my-12 bg-white text-gray-800 p-6 rounded-lg shadow overflow-y-auto h-[80vh]">
-      <h1 className="text-2xl font-bold mb-4">Privacy Policy</h1>
+      <h1 className="text-green-800 font-bold mb-4">Privacy Policy</h1>
       <p className="text-sm text-gray-600 mb-4">
         Last updated: October 2025
       </p>
