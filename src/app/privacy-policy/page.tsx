@@ -16,7 +16,7 @@ export default function PrivacyPolicy() {
           Act (NDPA) 2023 and other applicable privacy laws.
         </p>
 
-        <h2 className="font-semibold text-lg">1. Information We Collect</h2>
+        <h2 className="font-semibold text-green-800">1. Information We Collect</h2>
         <ul className="list-disc ml-6">
           <li>Personal Details: Your name, phone number, email address, and delivery address.</li>
           <li>Transaction Details: Information related to your purchases (e.g., payment details, product orders).</li>
@@ -24,7 +24,7 @@ export default function PrivacyPolicy() {
           <li>Cookies: Small text files stored on your device to help us improve your browsing experience and remember your preferences.</li>
         </ul>
 
-        <h2 className="font-semibold text-lg">2. Legal Basis for Processing Your Data</h2>
+        <h2 className="font-semibold text-green-800">2. Legal Basis for Processing Your Data</h2>
         <ul className="list-disc ml-6">
           <li>Your consent (e.g., signing up for marketing updates).</li>
           <li>To perform a contract (e.g., processing your order).</li>
@@ -33,7 +33,7 @@ export default function PrivacyPolicy() {
           <li>For our legitimate business interests, provided it doesn’t override your rights.</li>
         </ul>
 
-        <h2 className="font-semibold text-lg">3. How We Use Your Information</h2>
+        <h2 className="font-semibold text-green-800">3. How We Use Your Information</h2>
         <ul className="list-disc ml-6">
           <li>Process and deliver your orders.</li>
           <li>Communicate with you regarding purchases, support, or updates.</li>
@@ -42,38 +42,38 @@ export default function PrivacyPolicy() {
           <li>Comply with regulatory or legal requirements.</li>
         </ul>
 
-        <h2 className="font-semibold text-lg">4. How We Protect Your Information</h2>
+        <h2 className="font-semibold text-green-800">4. How We Protect Your Information</h2>
         <p>
           We implement appropriate technical and organizational measures to safeguard your information against loss, unauthorized access, or misuse.
           Sensitive data, such as payment information, is encrypted and processed through trusted third-party providers.
         </p>
 
-        <h2 className="font-semibold text-lg">5. Data Sharing and Disclosure</h2>
+        <h2 className="font-semibold text-green-800">5. Data Sharing and Disclosure</h2>
         <p>
           We do not sell or rent your personal data. However, we may share limited information with service providers and regulatory authorities as required by law.
         </p>
 
-        <h2 className="font-semibold text-lg">6. Data Retention</h2>
+        <h2 className="font-semibold text-green-800">6. Data Retention</h2>
         <p>
           We retain your data only as long as necessary for the purposes stated in this policy or as required by law.
         </p>
 
-        <h2 className="font-semibold text-lg">7. Your Data Protection Rights</h2>
+        <h2 className="font-semibold text-green-800">7. Your Data Protection Rights</h2>
         <p>
           Under the NDPA 2023, you have rights to access, correct, delete, withdraw consent, and object to processing. Contact us at schiiphahealth@gmail.com.
         </p>
 
-        <h2 className="font-semibold text-lg">8. Cookies</h2>
+        <h2 className="font-semibold text-green-800">8. Cookies</h2>
         <p>
           We use cookies to enhance user experience. You may disable them in your browser settings.
         </p>
 
-        <h2 className="font-semibold text-lg">9. Children’s Privacy</h2>
+        <h2 className="font-semibold text-green-800">9. Children’s Privacy</h2>
         <p>
           Our website and products are not directed at children under 13, and we do not knowingly collect their data.
         </p>
 
-        <h2 className="font-semibold text-lg">10. Contact Us</h2>
+        <h2 className="font-semibold text-green-800">10. Contact Us</h2>
         <p>
           Schiipha  
           📞 +234 915 554 9137, +2349125402776  
