@@ -39,12 +39,12 @@ export default function TermsAndConditions() {
           Confirmation will be sent after payment. If an order cannot be fulfilled, we’ll notify you and issue a refund.
         </p>
 
-        <h2 className="font-semibold text-green-500">5. Delivery</h2>
+        <h2 className="font-semibold text-green-800">5. Delivery</h2>
         <p>
           Delivery times may vary. Schiipha will not be liable for courier delays or unforeseen issues.
         </p>
 
-        <h2 className="font-semibold text-green-500">6. Returns & Exchanges</h2>
+        <h2 className="font-semibold text-green-800">6. Returns & Exchanges</h2>
         <p>
           If a product is damaged or incorrect, please contact us within 7 days. 
           Used or opened hygiene products cannot be returned.
