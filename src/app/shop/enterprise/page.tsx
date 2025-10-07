@@ -66,7 +66,7 @@ function EnterprisePageInner() {
         {/* Product Image */}
         <div className="md:w-1/2 flex justify-center items-center">
           <motion.img
-            src="/product.jpg"
+            src="/product.png"
             alt="Bum's Hero Enterprise"
             className="rounded-lg w-full max-w-sm h-auto object-cover"
             whileHover={{ scale: 1.03 }}
@@ -89,7 +89,7 @@ function EnterprisePageInner() {
           </div>
 
           {/* Quantity Selector */}
-          <div className="flex items-center gap-4 mt-4">
+          <div className="flex items-center gap-4 ">
             <button
               onClick={handleDecrease}
               className="px-4 py-2 bg-[#403F2B] text-[#FEFAF1] rounded hover:bg-[#29291F] transition"

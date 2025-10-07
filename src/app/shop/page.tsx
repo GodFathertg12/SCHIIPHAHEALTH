@@ -9,7 +9,7 @@ export default function ShopPage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-4xl md:text-5xl font-[Fraunces] mb-10"
+        className="text-4xl md:text-green-800 font-[Fraunces] mb-10"
       >
         Choose Your Pack
       </motion.h1>
