@@ -5,6 +5,11 @@ import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CartContext } from "../../components/CartContext";
 
+interface ReferralResponse {
+  valid: boolean;
+  discount: number;
+}
+
 export default function ProductPage() {
   const router = useRouter();
 
@@ -28,7 +33,7 @@ export default function ProductPage() {
       if (codeFromUrl) {
         fetch(`/api/referrals?code=${codeFromUrl}`)
           .then(res => res.json())
-          .then(data => {
+          .then((data: ReferralResponse) => {
             if (data.valid) {
               setReferralCode(codeFromUrl);
               setReferralDiscount(data.discount);
@@ -67,7 +72,7 @@ export default function ProductPage() {
         >
           <motion.img
             src="/product.png"
-            alt="Bum's Hero"
+            alt="Bum&apos;s Hero"
             className="rounded-lg shadow-lg w-full max-w-md h-auto object-cover cursor-pointer"
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 200 }}
@@ -76,13 +81,15 @@ export default function ProductPage() {
 
         {/* Product Details */}
         <div className="md:w-1/2 flex flex-col justify-start">
-          <h1 className="text-4xl font-[Fraunces] mb-4 text-[#403F2B]">Bum's Hero</h1>
+          <h1 className="text-4xl font-[Fraunces] mb-4 text-[#403F2B]">
+            Bum&apos;s Hero
+          </h1>
           <p className="text-lg mb-2 font-[Avenir]">
             Price: <span className="font-semibold">₦{pricePerSet.toLocaleString()}</span>
           </p>
 
           <p className="text-base mb-6 leading-relaxed font-[Avenir]">
-            From unique designs to high-quality materials, our Bum's Hero products
+            From unique designs to high-quality materials, our Bum&apos;s Hero products
             are a must-have for everyone seeking a comfortable toilet experience.
             <br />
             <span className="font-semibold">7 pieces for ₦{pricePerSet.toLocaleString()}</span>
@@ -132,7 +139,7 @@ export default function ProductPage() {
           <div className="mt-8 p-4 bg-[#403F2B] text-[#F3F1C4] rounded-lg shadow-inner">
             <p className="font-semibold mb-2">Cart Preview</p>
             <p>
-              {quantity} × Bum's Hero = ₦{baseTotal.toLocaleString()}
+              {quantity} × Bum&apos;s Hero = ₦{baseTotal.toLocaleString()}
               {referralDiscount > 0 && (
                 <>
                   <br />

@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CartContext } from "../../../components/CartContext";
 
-export default function EnterprisePage() {
+function EnterprisePageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -22,9 +22,10 @@ export default function EnterprisePage() {
   const handleIncrease = () => setQuantity(prev => prev + 1);
   const handleDecrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
-  // Auto-apply referral code from URL
+  // ✅ Auto-apply referral code from URL safely inside Suspense
   useEffect(() => {
-    const codeFromUrl = searchParams?.get?.("ref")?.toUpperCase();
+    if (!searchParams) return;
+    const codeFromUrl = searchParams.get("ref")?.toUpperCase();
     if (codeFromUrl) {
       fetch(`/api/referrals?code=${codeFromUrl}`)
         .then(res => res.json())
@@ -145,5 +146,14 @@ export default function EnterprisePage() {
         </div>
       </motion.div>
     </main>
+  );
+}
+
+// ✅ Suspense wrapper prevents build-time hydration errors
+export default function EnterprisePage() {
+  return (
+    <Suspense fallback={<div className="text-center py-20">Loading...</div>}>
+      <EnterprisePageInner />
+    </Suspense>
   );
 }

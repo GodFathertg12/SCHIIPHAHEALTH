@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useContext, useEffect } from "react";
+import { Suspense, useState, useContext, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CartContext } from "../../../components/CartContext";
 
-export default function StudentPage() {
+function StudentContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -22,6 +22,7 @@ export default function StudentPage() {
   const handleIncrease = () => setQuantity(prev => prev + 1);
   const handleDecrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
+  // Auto-apply referral from URL
   useEffect(() => {
     const codeFromUrl = searchParams?.get?.("ref")?.toUpperCase();
     if (codeFromUrl) {
@@ -127,5 +128,13 @@ export default function StudentPage() {
         </div>
       </motion.div>
     </main>
+  );
+}
+
+export default function StudentPage() {
+  return (
+    <Suspense fallback={<p className="p-10 text-center">Loading student package...</p>}>
+      <StudentContent />
+    </Suspense>
   );
 }

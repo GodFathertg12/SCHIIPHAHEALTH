@@ -1,56 +1,50 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
-export default function StudentPage() {
+export default function ShopPage() {
   return (
     <main className="min-h-screen bg-[#FEFAF1] flex flex-col items-center justify-center px-6 py-12">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-4xl w-full bg-white rounded-xl shadow-xl p-10 flex flex-col md:flex-row gap-10"
-      >
-        {/* Product Image */}
-        <div className="md:w-1/2 flex justify-center items-center">
-          <motion.img
-            src="/product.jpg"
-            alt="Bum's Hero Student"
-            className="rounded-lg w-full max-w-sm h-auto object-cover"
-            whileHover={{ scale: 1.03 }}
-            transition={{ type: "spring", stiffness: 200 }}
-          />
-        </div>
+      <h1 className="text-4xl md:text-5xl font-[Fraunces] mb-12 text-[#403F2B] text-center">
+        Choose Your Shop Type
+      </h1>
 
-        {/* Product Details */}
-        <div className="md:w-1/2 flex flex-col justify-between gap-6">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-[Fraunces] text-[#403F2B]">
-              Bum's Hero - Student Pack
-            </h1>
-            <p className="text-xl md:text-2xl font-semibold text-[#29291F] mt-2">
-              7 pieces for ₦3,000
-            </p>
-            <p className="text-base md:text-lg text-[#403F2B] leading-relaxed mt-4">
-              Perfect for students seeking comfort and quality. High-quality materials and unique designs.
-            </p>
-          </div>
-
-          {/* Quantity Selector */}
-          <div className="flex items-center gap-4 mt-4">
-            {/* You can add quantity buttons here if needed */}
-          </div>
-
-          {/* Shop Now Button */}
+      <div className="flex flex-col md:flex-row gap-12">
+        {/* Student Option */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="bg-[#403F2B] text-[#FEFAF1] p-12 rounded-lg shadow-lg flex flex-col items-center gap-6 cursor-pointer"
+        >
+          <h2 className="text-2xl font-semibold">Student</h2>
+          <p className="text-center">
+            7 pieces of Bum's Hero <br /> <span className="font-bold">₦3,000</span>
+          </p>
           <Link
-            href="/products"
-            className="mt-6 bg-[#403F2B] text-[#FEFAF1] font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-[#29291F] transition transform hover:scale-105 text-center"
+            href="/student"
+            className="mt-4 bg-[#F3F1C4] text-[#29291F] px-6 py-3 rounded-lg font-semibold hover:bg-[#d9d79e] transition"
           >
             Shop Now
           </Link>
-        </div>
-      </motion.div>
+        </motion.div>
+
+        {/* Enterprise Option */}
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          className="bg-[#29291F] text-[#FEFAF1] p-12 rounded-lg shadow-lg flex flex-col items-center gap-6 cursor-pointer"
+        >
+          <h2 className="text-2xl font-semibold">Enterprise</h2>
+          <p className="text-center">
+            100 pieces of Bum's Hero <br /> <span className="font-bold">₦90,000</span>
+          </p>
+          <Link
+            href="/enterprise"
+            className="mt-4 bg-[#F3F1C4] text-[#29291F] px-6 py-3 rounded-lg font-semibold hover:bg-[#d9d79e] transition"
+          >
+            Shop Now
+          </Link>
+        </motion.div>
+      </div>
     </main>
   );
 }

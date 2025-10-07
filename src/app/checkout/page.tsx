@@ -3,6 +3,11 @@
 import { useState, useContext, useEffect } from "react";
 import { CartContext } from "@/components/CartContext";
 import Link from "next/link";
+import Image from "next/image";
+
+interface PaystackResponse {
+  reference: string;
+}
 
 export default function CheckoutPage() {
   const ctx = useContext(CartContext);
@@ -21,7 +26,7 @@ export default function CheckoutPage() {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  // ✅ Load Paystack script
+  // Load Paystack script
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -30,10 +35,7 @@ export default function CheckoutPage() {
       const script = document.createElement("script");
       script.src = "https://js.paystack.co/v1/inline.js";
       script.async = true;
-      script.onload = () => {
-        console.log("✅ Paystack loaded");
-        setScriptLoaded(true);
-      };
+      script.onload = () => setScriptLoaded(true);
       script.onerror = () => alert("❌ Failed to load Paystack script.");
       document.body.appendChild(script);
     } else {
@@ -41,17 +43,15 @@ export default function CheckoutPage() {
     }
   }, []);
 
-  // ✅ Paystack payment handler
   const handlePaystackPayment = () => {
     if (!scriptLoaded) return alert("⚠️ Paystack not ready yet. Please wait.");
     if (!email) return alert("Please enter your email.");
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const PaystackPop = (window as any).PaystackPop;
     if (!PaystackPop) return alert("⚠️ Paystack failed to initialize.");
 
     const handler = PaystackPop.setup({
-      key: "pk_live_8a67ab1a0c1db93b72996e699a335eed39c39e62",
+      key: process.env.NEXT_PUBLIC_PAYSTACK_KEY,
       email,
       amount: total * 100,
       currency: "NGN",
@@ -65,14 +65,12 @@ export default function CheckoutPage() {
           },
         ],
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      callback: (response: any) => {
+      callback: (response: PaystackResponse) => {
         console.log("✅ Payment successful:", response);
         alert(`✅ Payment successful! Reference: ${response.reference}`);
         setPaymentSuccess(true);
         clearCart();
 
-        // 🧾 Record transaction
         fetch("/api/payments", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -83,7 +81,9 @@ export default function CheckoutPage() {
             status: "success",
             referralCode,
           }),
-        }).catch((err) => console.error("❌ Failed to save payment:", err));
+        }).catch(err => {
+          if (err instanceof Error) console.error("❌ Failed to save payment:", err.message);
+        });
       },
       onClose: () => {
         alert("❌ Payment window closed or cancelled.");
@@ -97,19 +97,33 @@ export default function CheckoutPage() {
     <main className="min-h-screen bg-[#FEFAF1] text-[#29291F] px-6 py-12">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
         {/* Summary */}
-        <div className="bg-[#403F2B] text-[#FEFAF1] p-6 rounded-xl shadow-md">
+        <div className="bg-[#403F2B] text-[#FEFAF1] p-6 rounded-xl shadow-md flex flex-col items-center">
           <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
-          <div className="flex justify-between mb-2">
-            <p>Bum’s Hero × {quantity}</p>
+
+          {/* Product Image */}
+          <div className="mb-4 w-48 h-48 relative">
+            <Image
+              src="/product.png"
+              alt="Bum's Hero"
+              fill
+              className="object-cover rounded-lg shadow-lg"
+            />
+          </div>
+
+          <div className="flex justify-between w-full mb-2">
+            <p>Bum's Hero × {quantity}</p>
             <p>₦{subtotal.toLocaleString()}</p>
           </div>
-          <hr className="my-3 border-[#F3F1C4]/40" />
-          <div className="flex justify-between font-semibold text-lg">
+
+          <hr className="my-3 border-[#F3F1C4]/40 w-full" />
+
+          <div className="flex justify-between font-semibold text-lg w-full">
             <p>Total:</p>
             <p>₦{total.toLocaleString()}</p>
           </div>
+
           {paymentSuccess && (
-            <div className="mt-4 p-3 bg-green-100 text-green-800 rounded">
+            <div className="mt-4 p-3 bg-green-100 text-green-800 rounded w-full text-center">
               ✅ Payment recorded successfully.
             </div>
           )}
@@ -152,9 +166,7 @@ export default function CheckoutPage() {
             disabled={!scriptLoaded}
             onClick={handlePaystackPayment}
             className={`w-full mt-6 py-3 rounded-md font-semibold transition ${
-              scriptLoaded
-                ? "bg-[#403F2B] text-[#FEFAF1] hover:bg-[#29291F]"
-                : "bg-gray-400 text-white cursor-not-allowed"
+              scriptLoaded ? "bg-[#403F2B] text-[#FEFAF1] hover:bg-[#29291F]" : "bg-gray-400 text-white cursor-not-allowed"
             }`}
           >
             {scriptLoaded ? "Pay Now" : "Loading Paystack..."}
