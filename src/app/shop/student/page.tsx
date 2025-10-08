@@ -97,8 +97,12 @@ function StudentContent() {
       </motion.div>
     </main>
   );
-};
-export default function StudentPage(){
-  return <div>Student Page</div>;
 }
 
+export default function StudentPage() {
+  return (
+    <Suspense fallback={<p className="p-10 text-center">Loading student package...</p>}>
+      <StudentContent />
+    </Suspense>
+  );
+}
