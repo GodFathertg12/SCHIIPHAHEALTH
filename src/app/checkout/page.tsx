@@ -147,6 +147,16 @@ export default function CheckoutPage() {
               onChange={(e) => setEmail(e.target.value)}
               className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
             />
+
+            {/* Read-only Referral Code Input */}
+            <input
+              type="text"
+              placeholder="Referral Code"
+              value={referralCode || ""}
+              readOnly
+              className="border border-[#403F2B]/30 rounded-md px-4 py-2 bg-gray-100 text-gray-700 cursor-not-allowed"
+            />
+
             <input
               type="tel"
               placeholder="Phone Number"
@@ -166,7 +176,9 @@ export default function CheckoutPage() {
             disabled={!scriptLoaded}
             onClick={handlePaystackPayment}
             className={`w-full mt-6 py-3 rounded-md font-semibold transition ${
-              scriptLoaded ? "bg-[#403F2B] text-[#FEFAF1] hover:bg-[#29291F]" : "bg-gray-400 text-white cursor-not-allowed"
+              scriptLoaded
+                ? "bg-[#403F2B] text-[#FEFAF1] hover:bg-[#29291F]"
+                : "bg-gray-400 text-white cursor-not-allowed"
             }`}
           >
             {scriptLoaded ? "Pay Now" : "Loading Paystack..."}

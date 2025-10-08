@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/utils/supabaseClient";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { email, amount, reference, status, referral_code }: any = await request.json();
+    const body = await req.json();
+    const { email, amount, reference, status, referralCode } = body;
 
-    const { data, error } = await supabase
+    // Insert into Supabase
+    const { error } = await supabase
       .from("payments")
       .insert([
         {
@@ -19,37 +15,20 @@ export async function POST(request: Request) {
           amount,
           reference,
           status,
-          referral_code: referral_code || null,
+          referral_code: referralCode || "none",
+          created_at: new Date().toISOString(),
         },
-      ])
-      .select();
+      ]);
 
     if (error) {
-      console.error("Supabase insert error:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("❌ Supabase insert failed:", error.message);
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
-    if (referral_code && referral_code !== "none") {
-      const { data: refData }: any = await supabase
-        .from("users")
-        .select("email")
-        .eq("referral_code", referral_code)
-        .single();
-
-      if (refData?.email) {
-        await supabase.from("referrals").insert([
-          {
-            referrer_email: refData.email,
-            referee_email: email,
-            payment_reference: reference,
-          },
-        ]);
-      }
-    }
-
-    return NextResponse.json({ message: "Payment saved successfully", data });
+    console.log("✅ Payment saved to Supabase");
+    return NextResponse.json({ success: true });
   } catch (err: any) {
-    console.error("Server error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    console.error("❌ Payment route error:", err.message);
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
