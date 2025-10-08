@@ -32,6 +32,9 @@ export default function HomePage() {
     if (refCode && validCodes.includes(refCode.toLowerCase())) {
       localStorage.setItem("referralCode", refCode.toLowerCase());
       console.log("Referral saved:", refCode);
+
+
+      window.location.href ="/student"
     }
 
     return () => window.removeEventListener("scroll", handleScroll);

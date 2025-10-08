@@ -12,11 +12,15 @@ interface PaystackResponse {
 export default function CheckoutPage() {
   const ctx = useContext(CartContext);
   const quantity = ctx?.quantity ?? 1;
-  const referralCode =
-    ctx?.referralCode ??
-    (typeof window !== "undefined"
-      ? localStorage.getItem("referralCode") ?? ""
-      : "");
+  const [referralCode, setReferralCode] = useState("");
+  
+  useEffect(()=> {
+    if(typeof window !== "undefined"){
+      const storedCode = localStorage.getItem("referralCode");
+      if (storedCode)setReferralCode(storedCode);
+    }
+  });
+ 
   const clearCart = ctx?.clearCart ?? (() => {});
 
   const pricePerSet = 3000;
