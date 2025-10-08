@@ -13,24 +13,27 @@ export default function CheckoutPage() {
   const ctx = useContext(CartContext);
   const quantity = ctx?.quantity ?? 1;
   const referralCode =
-    ctx?.referralCode ?? (typeof window !== "undefined" ? localStorage.getItem("referralCode") ?? "" : "");
-  const referralDiscount = ctx?.referralDiscount ?? 0;
-  const discountedTotal = ctx?.discountedTotal ?? 0;
+    ctx?.referralCode ??
+    (typeof window !== "undefined"
+      ? localStorage.getItem("referralCode") ?? ""
+      : "");
   const clearCart = ctx?.clearCart ?? (() => {});
 
   const pricePerSet = 3000;
   const subtotal = pricePerSet * quantity;
-  const total = referralDiscount > 0 && discountedTotal > 0 ? discountedTotal : subtotal;
+  const total = subtotal; // no discounts now
 
   const [email, setEmail] = useState("");
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  // Load Paystack script
+  // ✅ Load Paystack script
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const existing = document.querySelector('script[src="https://js.paystack.co/v1/inline.js"]');
+    const existing = document.querySelector(
+      'script[src="https://js.paystack.co/v1/inline.js"]'
+    );
     if (!existing) {
       const script = document.createElement("script");
       script.src = "https://js.paystack.co/v1/inline.js";
@@ -81,8 +84,9 @@ export default function CheckoutPage() {
             status: "success",
             referralCode,
           }),
-        }).catch(err => {
-          if (err instanceof Error) console.error("❌ Failed to save payment:", err.message);
+        }).catch((err) => {
+          if (err instanceof Error)
+            console.error("❌ Failed to save payment:", err.message);
         });
       },
       onClose: () => {
@@ -130,8 +134,13 @@ export default function CheckoutPage() {
         </div>
 
         {/* Checkout Form */}
-        <form className="bg-white p-6 rounded-xl shadow-md" onSubmit={(e) => e.preventDefault()}>
-          <h2 className="text-2xl font-bold mb-6 text-[#403F2B]">Shipping Details</h2>
+        <form
+          className="bg-white p-6 rounded-xl shadow-md"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <h2 className="text-2xl font-bold mb-6 text-[#403F2B]">
+            Shipping Details
+          </h2>
           <div className="flex flex-col gap-4">
             <input
               type="text"
@@ -148,14 +157,16 @@ export default function CheckoutPage() {
               className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
             />
 
-            {/* Read-only Referral Code Input */}
-            <input
-              type="text"
-              placeholder="Referral Code"
-              value={referralCode || ""}
-              readOnly
-              className="border border-[#403F2B]/30 rounded-md px-4 py-2 bg-gray-100 text-gray-700 cursor-not-allowed"
-            />
+            {/* Read-only Referral Code */}
+            {referralCode && (
+              <input
+                type="text"
+                placeholder="Referral Code"
+                value={referralCode}
+                readOnly
+                className="border border-[#403F2B]/30 rounded-md px-4 py-2 bg-gray-100 text-gray-700 cursor-not-allowed"
+              />
+            )}
 
             <input
               type="tel"
@@ -185,7 +196,7 @@ export default function CheckoutPage() {
           </button>
 
           <p className="mt-4 text-sm text-center">
-            <Link href="/product" className="text-[#403F2B] underline">
+            <Link href="/student" className="text-[#403F2B] underline">
               ← Continue Shopping
             </Link>
           </p>

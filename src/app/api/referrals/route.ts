@@ -1,14 +1,31 @@
 import { NextResponse } from "next/server";
+import { supabase } from "@/utils/supabaseClient";
 
-export async function PUT(request: Request) {
+export async function POST(req: Request) {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { code }: any = await request.json();
-    console.log("Referral used:", code);
+    const { referralCode } = await req.json();
 
+    if (!referralCode) {
+      return NextResponse.json({ success: false, error: "Referral code missing" }, { status: 400 });
+    }
+
+    // ✅ Save referral event in Supabase
+    const { error } = await supabase.from("referrals").insert([
+      {
+        referral_code: referralCode,
+        used_at: new Date().toISOString(),
+      },
+    ]);
+
+    if (error) {
+      console.error("❌ Failed to record referral:", error.message);
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    }
+
+    console.log(`✅ Referral recorded for: ${referralCode}`);
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error("Error updating referral:", error);
-    return NextResponse.json({ success: false }, { status: 500 });
+  } catch (err: any) {
+    console.error("❌ Referral route error:", err.message);
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }

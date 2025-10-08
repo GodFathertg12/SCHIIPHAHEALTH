@@ -1,20 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Suspense, useState, useContext, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState, useContext } from "react";
+import { useRouter } from "next/navigation";
 import { CartContext } from "../../../components/CartContext";
 
 function StudentContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const { addToCart, generatedCode } = useContext(CartContext);
 
   const [quantity, setQuantity] = useState(1);
-  const [referralCode, setReferralCode] = useState("");
-  const [referralDiscount, setReferralDiscount] = useState(0);
-  const [referralValid, setReferralValid] = useState(false);
-
-  const { addToCart, generatedCode } = useContext(CartContext);
 
   const pricePerSet = 3000; // Student price
   const piecesPerSet = 7; // Student quantity
@@ -22,35 +17,15 @@ function StudentContent() {
   const handleIncrease = () => setQuantity(prev => prev + 1);
   const handleDecrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
-  // Auto-apply referral from URL
-  useEffect(() => {
-    const codeFromUrl = searchParams?.get?.("ref")?.toUpperCase();
-    if (codeFromUrl) {
-      fetch(`/api/referrals?code=${codeFromUrl}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.valid) {
-            setReferralCode(codeFromUrl);
-            setReferralDiscount(data.discount);
-            setReferralValid(true);
-          }
-        })
-        .catch(err => console.error("Referral check failed:", err));
-    }
-  }, [searchParams]);
-
-  const baseTotal = pricePerSet * quantity;
-  const discountedTotal = referralDiscount
-    ? baseTotal - (baseTotal * referralDiscount) / 100
-    : baseTotal;
+  const total = pricePerSet * quantity;
 
   const handleAddToCart = () => {
-    addToCart(quantity, referralCode, referralDiscount, discountedTotal);
+    addToCart(quantity, "", total, generatedCode);
     alert("🛒 Item added to cart!");
   };
 
   const handleProceedToCheckout = () => {
-    addToCart(quantity, referralCode, referralDiscount, discountedTotal, generatedCode);
+    addToCart(quantity, "", total, generatedCode);
     router.push("/checkout");
   };
 
@@ -108,7 +83,7 @@ function StudentContent() {
               onClick={handleAddToCart}
               className="bg-[#F3F1C4] text-[#29291F] font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-[#d9d79e] transition transform hover:scale-105"
             >
-              Add to Cart (₦{discountedTotal.toLocaleString()})
+              Add to Cart (₦{total.toLocaleString()})
             </button>
 
             <button
@@ -118,13 +93,6 @@ function StudentContent() {
               Proceed to Checkout
             </button>
           </div>
-
-          {/* Referral Code */}
-          {referralValid && referralCode && (
-            <p className="mt-4 p-3 bg-green-100 text-green-800 rounded">
-              🎉 Referral code applied: <strong>{referralCode}</strong> — {referralDiscount}% discount!
-            </p>
-          )}
         </div>
       </motion.div>
     </main>
