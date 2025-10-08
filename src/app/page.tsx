@@ -97,9 +97,9 @@ export default function HomePage() {
             Eco-Commitment
           </h2>
           <p className="text-[#F3F1C4]/80 font-[Avenir]">
-            Schiipha, proudly based in Lagos, is redefining hygiene with eco-friendly innovation. Our portable, biodegrable potties create a clean and reliable barrier
-            between users and toilet seats, noplastic, no waste, just peace of mind. Trusted by Schools, restaurants, hospitals, hotels, and organizations, we make hygiene
-            simple, safe, and sustainable. At Schiipha, carinng for people and the planet goes hand in hand. Join us in building cleaner habits and a 
+            Schiipha, proudly based in Lagos, is redefining hygiene with eco-friendly innovation. Our portable, biodegradable potties create a clean and reliable barrier
+            between users and toilet seats, no plastic, no waste, just peace of mind. Trusted by schools, restaurants, hospitals, hotels, and organizations, we make hygiene
+            simple, safe, and sustainable. At Schiipha, caring for people and the planet goes hand in hand. Join us in building cleaner habits and a 
             healthier future, one flush at a time.
           </p>
         </motion.div>
