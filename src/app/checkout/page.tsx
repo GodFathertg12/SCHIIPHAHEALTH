@@ -19,7 +19,7 @@ export default function CheckoutPage() {
       const storedCode = localStorage.getItem("referralCode");
       if (storedCode)setReferralCode(storedCode);
     }
-  });
+  }, []);
  
   const clearCart = ctx?.clearCart ?? (() => {});
 
