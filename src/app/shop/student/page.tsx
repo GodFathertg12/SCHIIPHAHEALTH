@@ -1,12 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Suspense, useState, useContext } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, useContext, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { CartContext } from "../../../components/CartContext";
 
 function StudentContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { addToCart, generatedCode } = useContext(CartContext);
 
   const [quantity, setQuantity] = useState(1);
@@ -14,8 +15,17 @@ function StudentContent() {
   const pricePerSet = 3000; // Student price
   const piecesPerSet = 7; // Student quantity
 
-  const handleIncrease = () => setQuantity(prev => prev + 1);
-  const handleDecrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+  // ✅ Detect and store referral code from URL
+  useEffect(() => {
+    const code = searchParams?.get("ref");
+    if (code) {
+      localStorage.setItem("referralCode", code);
+      console.log("✅ Referral code saved:", code);
+    }
+  }, [searchParams]);
+
+  const handleIncrease = () => setQuantity((prev) => prev + 1);
+  const handleDecrease = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   const total = pricePerSet * quantity;
 
