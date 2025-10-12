@@ -21,7 +21,7 @@ export default function HomePage() {
       "majeed",
       "joel",
       "ayo",
-      "robinson",
+      "nexsys",
       "abraham",
       "jide",
       "shina",
