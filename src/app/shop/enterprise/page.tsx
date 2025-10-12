@@ -40,7 +40,7 @@ function EnterpriseContent() {
         {/* Product Image */}
         <div className="md:w-1/2 flex justify-center items-center">
           <motion.img
-            src="/enterprise-product.png"
+            src="/product.png"
             alt="Bum's Hero Enterprise"
             className="rounded-lg w-full max-w-sm h-auto object-cover"
             whileHover={{ scale: 1.03 }}
