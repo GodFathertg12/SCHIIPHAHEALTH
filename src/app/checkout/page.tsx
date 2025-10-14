@@ -13,46 +13,43 @@ export default function CheckoutPage() {
   const ctx = useContext(CartContext);
   const quantity = ctx?.quantity ?? 1;
   const [referralCode, setReferralCode] = useState("");
-  
-  useEffect(()=> {
-    if(typeof window !== "undefined"){
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
       const storedCode = localStorage.getItem("referralCode");
-      if (storedCode)setReferralCode(storedCode);
+      if (storedCode) setReferralCode(storedCode);
     }
   }, []);
- 
-  const clearCart = ctx?.clearCart ?? (() => {});
 
+  const clearCart = ctx?.clearCart ?? (() => {});
   const pricePerSet = 3000;
   const subtotal = pricePerSet * quantity;
-  const total = subtotal; // no discounts now
+  const total = subtotal;
 
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  // ✅ Load Paystack script
+  // Load Paystack script
   useEffect(() => {
     if (typeof window === "undefined") return;
-
-    const existing = document.querySelector(
-      'script[src="https://js.paystack.co/v1/inline.js"]'
-    );
+    const existing = document.querySelector('script[src="https://js.paystack.co/v1/inline.js"]');
     if (!existing) {
       const script = document.createElement("script");
       script.src = "https://js.paystack.co/v1/inline.js";
       script.async = true;
       script.onload = () => setScriptLoaded(true);
-      script.onerror = () => alert("❌ Failed to load Paystack script.");
+      script.onerror = () => alert("⚠️ Failed to load Paystack script.");
       document.body.appendChild(script);
-    } else {
-      setScriptLoaded(true);
-    }
+    } else setScriptLoaded(true);
   }, []);
 
   const handlePaystackPayment = () => {
-    if (!scriptLoaded) return alert("⚠️ Paystack not ready yet. Please wait.");
-    if (!email) return alert("Please enter your email.");
+    if (!scriptLoaded) return alert("⚠️ Paystack not ready yet.");
+    if (!email || !fullName || !phone || !address) return alert("Please fill in all required details.");
 
     const PaystackPop = (window as any).PaystackPop;
     if (!PaystackPop) return alert("⚠️ Paystack failed to initialize.");
@@ -72,29 +69,33 @@ export default function CheckoutPage() {
           },
         ],
       },
-      callback: (response: PaystackResponse) => {
-        console.log("✅ Payment successful:", response);
+      callback: async (response: PaystackResponse) => {
         alert(`✅ Payment successful! Reference: ${response.reference}`);
         setPaymentSuccess(true);
         clearCart();
 
-        fetch("/api/payments", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            amount: total,
-            reference: response.reference,
-            status: "success",
-            referralCode,
-          }),
-        }).catch((err) => {
-          if (err instanceof Error)
-            console.error("❌ Failed to save payment:", err.message);
-        });
+        // Save order info to Supabase
+        try {
+          await fetch("/api/payments", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              fullName,
+              email,
+              phone,
+              address,
+              amount: total,
+              reference: response.reference,
+              status: "success",
+              referralCode,
+            }),
+          });
+        } catch (err: any) {
+          console.error("❌ Failed to save payment:", err.message);
+        }
       },
       onClose: () => {
-        alert("❌ Payment window closed or cancelled.");
+        alert("⚠️ Payment window closed or cancelled.");
       },
     });
 
@@ -107,29 +108,18 @@ export default function CheckoutPage() {
         {/* Summary */}
         <div className="bg-[#403F2B] text-[#FEFAF1] p-6 rounded-xl shadow-md flex flex-col items-center">
           <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
-
-          {/* Product Image */}
           <div className="mb-4 w-48 h-48 relative">
-            <Image
-              src="/product.png"
-              alt="Bum's Hero"
-              fill
-              className="object-cover rounded-lg shadow-lg"
-            />
+            <Image src="/product.png" alt="Bum's Hero" fill className="object-cover rounded-lg shadow-lg" />
           </div>
-
           <div className="flex justify-between w-full mb-2">
             <p>Bum's Hero × {quantity}</p>
             <p>₦{subtotal.toLocaleString()}</p>
           </div>
-
           <hr className="my-3 border-[#F3F1C4]/40 w-full" />
-
           <div className="flex justify-between font-semibold text-lg w-full">
             <p>Total:</p>
             <p>₦{total.toLocaleString()}</p>
           </div>
-
           {paymentSuccess && (
             <div className="mt-4 p-3 bg-green-100 text-green-800 rounded w-full text-center">
               ✅ Payment recorded successfully.
@@ -138,18 +128,15 @@ export default function CheckoutPage() {
         </div>
 
         {/* Checkout Form */}
-        <form
-          className="bg-white p-6 rounded-xl shadow-md"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <h2 className="text-2xl font-bold mb-6 text-[#403F2B]">
-            Shipping Details
-          </h2>
+        <form className="bg-white p-6 rounded-xl shadow-md" onSubmit={(e) => e.preventDefault()}>
+          <h2 className="text-2xl font-bold mb-6 text-[#403F2B]">Shipping Details</h2>
           <div className="flex flex-col gap-4">
             <input
               type="text"
               placeholder="Full Name"
               required
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
             />
             <input
@@ -160,8 +147,6 @@ export default function CheckoutPage() {
               onChange={(e) => setEmail(e.target.value)}
               className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
             />
-
-            {/* Read-only Referral Code */}
             {referralCode && (
               <input
                 type="text"
@@ -171,16 +156,19 @@ export default function CheckoutPage() {
                 className="border border-[#403F2B]/30 rounded-md px-4 py-2 bg-gray-100 text-gray-700 cursor-not-allowed"
               />
             )}
-
             <input
               type="tel"
               placeholder="Phone Number"
               required
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
             />
             <textarea
               placeholder="Delivery Address"
               required
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
               rows={3}
             />
