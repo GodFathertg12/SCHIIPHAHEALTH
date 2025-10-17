@@ -12,7 +12,7 @@ function StudentContent() {
 
   const [quantity, setQuantity] = useState(1);
 
-  const pricePerSet = 3000; // Student price
+  const pricePerSet = 2000; // Student price
   const piecesPerSet = 7; // Student quantity
 
   // ✅ Detect and store referral code from URL
