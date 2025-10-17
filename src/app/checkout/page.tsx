@@ -22,7 +22,7 @@ export default function CheckoutPage() {
   }, []);
 
   const clearCart = ctx?.clearCart ?? (() => {});
-  const pricePerSet = 3000;
+  const pricePerSet = 2000; // ✅ Updated from 3000
   const subtotal = pricePerSet * quantity;
   const total = subtotal;
 
@@ -33,7 +33,7 @@ export default function CheckoutPage() {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  // Load Paystack script
+  // ✅ Load Paystack Script
   useEffect(() => {
     if (typeof window === "undefined") return;
     const existing = document.querySelector('script[src="https://js.paystack.co/v1/inline.js"]');
@@ -44,11 +44,13 @@ export default function CheckoutPage() {
       script.onload = () => setScriptLoaded(true);
       script.onerror = () => alert("⚠️ Failed to load Paystack script.");
       document.body.appendChild(script);
-    } else setScriptLoaded(true);
+    } else {
+      setScriptLoaded(true);
+    }
   }, []);
 
   const handlePaystackPayment = () => {
-    if (!scriptLoaded) return alert("⚠️ Paystack not ready yet.");
+    if (!scriptLoaded) return alert("⚠️ Paystack not ready yet. Please wait.");
     if (!email || !fullName || !phone || !address) return alert("Please fill in all required details.");
 
     const PaystackPop = (window as any).PaystackPop;
@@ -74,7 +76,6 @@ export default function CheckoutPage() {
         setPaymentSuccess(true);
         clearCart();
 
-        // Save order info to Supabase
         try {
           await fetch("/api/payments", {
             method: "POST",
@@ -131,64 +132,22 @@ export default function CheckoutPage() {
         <form className="bg-white p-6 rounded-xl shadow-md" onSubmit={(e) => e.preventDefault()}>
           <h2 className="text-2xl font-bold mb-6 text-[#403F2B]">Shipping Details</h2>
           <div className="flex flex-col gap-4">
-            <input
-              type="text"
-              placeholder="Full Name"
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
-            />
+            <input type="text" placeholder="Full Name" required value={fullName} onChange={(e) => setFullName(e.target.value)} className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]" />
+            <input type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)} className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]" />
             {referralCode && (
-              <input
-                type="text"
-                placeholder="Referral Code"
-                value={referralCode}
-                readOnly
-                className="border border-[#403F2B]/30 rounded-md px-4 py-2 bg-gray-100 text-gray-700 cursor-not-allowed"
-              />
+              <input type="text" placeholder="Referral Code" value={referralCode} readOnly className="border border-[#403F2B]/30 rounded-md px-4 py-2 bg-gray-100 text-gray-700 cursor-not-allowed" />
             )}
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              required
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
-            />
-            <textarea
-              placeholder="Delivery Address"
-              required
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]"
-              rows={3}
-            />
+            <input type="tel" placeholder="Phone Number" required value={phone} onChange={(e) => setPhone(e.target.value)} className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]" />
+            <textarea placeholder="Delivery Address" required value={address} onChange={(e) => setAddress(e.target.value)} className="border border-[#403F2B]/30 rounded-md px-4 py-2 focus:border-[#403F2B]" rows={3} />
           </div>
 
-          <button
-            type="button"
-            disabled={!scriptLoaded}
-            onClick={handlePaystackPayment}
-            className={`w-full mt-6 py-3 rounded-md font-semibold transition ${
-              scriptLoaded
-                ? "bg-[#403F2B] text-[#FEFAF1] hover:bg-[#29291F]"
-                : "bg-gray-400 text-white cursor-not-allowed"
-            }`}
-          >
+          <button type="button" disabled={!scriptLoaded} onClick={handlePaystackPayment} className={`w-full mt-6 py-3 rounded-md font-semibold transition ${scriptLoaded ? "bg-[#403F2B] text-[#FEFAF1] hover:bg-[#29291F]" : "bg-gray-400 text-white cursor-not-allowed"}`}>
             {scriptLoaded ? "Pay Now" : "Loading Paystack..."}
           </button>
 
+          {/* ✅ Updated Link to go back to student page */}
           <p className="mt-4 text-sm text-center">
-            <Link href="/student" className="text-[#403F2B] underline">
+            <Link href="/shop" className="text-[#403F2B] underline">
               ← Continue Shopping
             </Link>
           </p>
