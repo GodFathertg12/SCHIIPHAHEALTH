@@ -24,7 +24,7 @@ export default function ShopPage() {
         >
           <img src="/product.png" alt="Student Pack" className="rounded-lg w-56 mb-6" />
           <h2 className="text-2xl font-semibold mb-4 text-[#403F2B]">Student Pack</h2>
-          <p className="text-[#403F2B] mb-6">7 pieces for ₦3,000 — perfect for students.</p>
+          <p className="text-[#403F2B] mb-6">7 pieces for ₦2,000 — perfect for students.</p>
           <Link href="/shop/student">
             <button className="bg-[#403F2B] text-[#FEFAF1] px-6 py-3 rounded-lg hover:bg-[#29291F] transition">
               View Details
