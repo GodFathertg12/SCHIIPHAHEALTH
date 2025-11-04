@@ -10,6 +10,10 @@ import { useState, useContext, useEffect } from "react";
 import { CartContext } from "@/components/CartContext";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  saveOrderToQueue,
+  startOrderQueueWorker,
+} from "@/utils/orderQueue"; // ✅ Import the queue helpers
 
 export default function CheckoutPage() {
   const ctx = useContext(CartContext);
@@ -25,6 +29,11 @@ export default function CheckoutPage() {
   const [referralCode, setReferralCode] = useState("");
   const [scriptReady, setScriptReady] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  // ✅ Start background queue worker on app load
+  useEffect(() => {
+    startOrderQueueWorker();
+  }, []);
 
   // ✅ Load Paystack script once
   useEffect(() => {
@@ -62,14 +71,6 @@ export default function CheckoutPage() {
     const key = process.env.NEXT_PUBLIC_PAYSTACK_KEY;
     if (!key) return alert("Paystack public key missing in environment file.");
 
-    // Debug: check data before Paystack init
-    console.log("🔍 Paystack init data", { key, email, total, amount: total * 100 });
-
-    if (!window.PaystackPop) {
-      alert("⚠️ Paystack script not available yet.");
-      return;
-    }
-
     const handler = window.PaystackPop.setup({
       key,
       email,
@@ -81,36 +82,44 @@ export default function CheckoutPage() {
           { display_name: "Full Name", variable_name: "full_name", value: fullName },
           { display_name: "Phone", variable_name: "phone", value: phone },
           { display_name: "Address", variable_name: "address", value: address },
-          { display_name: "Referral Code", variable_name: "referral_code", value: referralCode || "none" },
+          {
+            display_name: "Referral Code",
+            variable_name: "referral_code",
+            value: referralCode || "none",
+          },
         ],
       },
 
-      // ✅ Wrapped callback to avoid async issues
-      callback: (response: any) => {
-        (async () => {
-          alert("✅ Payment successful! Reference: " + response.reference);
-          setPaymentSuccess(true);
-          clearCart();
+      // ✅ Failsafe payment callback
+      callback: async (response: any) => {
+        alert("✅ Payment successful! Reference: " + response.reference);
+        setPaymentSuccess(true);
+        clearCart();
 
-          try {
-            await fetch("/api/payments", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                fullName,
-                email,
-                phone,
-                address,
-                amount: total,
-                reference: response.reference,
-                status: "success",
-                referralCode,
-              }),
-            });
-          } catch (error) {
-            console.error("❌ Failed to save payment:", error);
-          }
-        })();
+        const orderData = {
+          fullName,
+          email,
+          phone,
+          address,
+          amount: total,
+          reference: response.reference,
+          status: "success",
+          referralCode,
+          date: new Date().toISOString(),
+        };
+
+        try {
+          const res = await fetch("/api/payments", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+          });
+
+          if (!res.ok) throw new Error("Supabase offline");
+        } catch (err) {
+          console.warn("⚠️ Failed to save payment, adding to queue...");
+          saveOrderToQueue(orderData);
+        }
       },
 
       onClose: () => {
