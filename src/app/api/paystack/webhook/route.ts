@@ -71,3 +71,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+export async function GET(req: Request) {
+  return new Response(
+    JSON.stringify({ message: "Webhook route live!" }),
+    { status: 200, headers: { "Content-Type": "application/json" } }
+  );
+}
