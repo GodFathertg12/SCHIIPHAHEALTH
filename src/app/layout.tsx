@@ -1,4 +1,6 @@
-/* src/app/layout.tsx */
+"use client";
+
+
 import "./globals.css";
 import Script from "next/script";
 import Navbar from "../components/Navbar";
